@@ -1,23 +1,29 @@
 <template>
   <div id="inicio">
-    <div class="hero">
+    <b-container fluid="md">
       <h1>R&M <span>Personajes</span></h1>
+
       <div>
-        <div class="control">
-          <input v-model="search" type="text" v-on:keyup.enter="searchData" />
-        </div>
-        <div class="control"> <button class="btn btn-success btn" v-on:click="searchData">Buscar</button></div>
+        <b-input-group v-for="size in ['sm']" :key="size" :size="size" class="mb-3">
+          <b-form-input v-model="search" type="text" v-on:keyup.enter="searchData"></b-form-input>
+          <b-input-group-append>
+            <b-button size="sm" text="Button" variant="success" v-on:click="searchData">Buscar</b-button>
+          </b-input-group-append>
+        </b-input-group>
       </div>
-    </div>
-    <div class="container">
-      <Character @showModal="showModal" v-for="character of characters" v-bind:key="character.id" v-bind:character="character" />
+    </b-container>
+
+    <b-container fluid="lg">
+      <b-row>
+        <Character @showModal="showModal" v-for="character of characters" v-bind:key="character.id" v-bind:character="character" />
+      </b-row>
 
       <nav>
         <button v-on:click="ChangePage(page - 1)">Anterior</button>
         {{ page }}
         <button v-on:click="ChangePage(page + 1)">Siguiente</button>
       </nav>
-    </div>
+    </b-container>
 
     <b-modal id="modal-sm" title="Rick & Morty" size="sm" ref="my-modal" hide-footer>
       <h2> {{ currentCharacter.name }}</h2>
@@ -107,15 +113,7 @@ body {
   background-size: cover;
   background-repeat: no-repeat;
 }
-.card {
-  display: flex;
-  align-items: center;
-  padding: 1em;
-}
-.card-title {
-  text-align: center;
-  padding: 30px;
-}
+
 h1,
 h2 {
   color: rgb(68, 168, 68);
@@ -123,8 +121,7 @@ h2 {
 span {
   color: white;
 }
-img {
-  width: 150px;
-  padding: 1em;
+b-form-imput {
+  padding: 20px 40px;
 }
 </style>
