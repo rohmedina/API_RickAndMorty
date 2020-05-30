@@ -2,12 +2,39 @@
   <div id="inicio">
     <div class="hero">
       <h1>R&M <span>Personajes</span></h1>
-      <input type="text" name="" id="" />
-      <button class="btn btn-success btn" v-on:click="fetch">Consultar</button>
+      <div>
+        <div class="control">
+          <input v-model="search" type="text" v-on:keyup.enter="searchData" />
+        </div>
+        <div class="control"> <button class="btn btn-success btn" v-on:click="searchData">Buscar</button></div>
+      </div>
     </div>
     <div class="container">
-      <Character v-for="character of characters" v-bind:key="character.id" v-bind:character="character" />
+      <Character @showModal="showModal" v-for="character of characters" v-bind:key="character.id" v-bind:character="character" />
+
+      <nav>
+        <button v-on:click="ChangePage(page - 1)">Anterior</button>
+        {{ page }}
+        <button v-on:click="ChangePage(page + 1)">Siguiente</button>
+      </nav>
     </div>
+
+    <b-modal id="modal-sm" title="Rick & Morty" size="sm" ref="my-modal" hide-footer>
+      <h2> {{ currentCharacter.name }}</h2>
+      <p class="my-4"
+        >Genero: <strong>{{ currentCharacter.gender }}</strong>
+      </p>
+      <p class="my-4"
+        >Estado: <strong>{{ currentCharacter.status }}</strong>
+      </p>
+      <p class="my-4"
+        >Especie: <strong>{{ currentCharacter.species }}</strong></p
+      >
+      <p class="my-4"
+        >Tipo: <strong>{{ currentCharacter.type }}</strong></p
+      >
+      <b-button class="mt-3" variant="outline-danger" block @click="hideModal">Cerrar</b-button>
+    </b-modal>
   </div>
 </template>
 
@@ -22,6 +49,11 @@ export default {
   data: function() {
     return {
       characters: [],
+      page: 1,
+      pages: 1,
+      search: "",
+      modal: false,
+      currentCharacter: {},
     };
   },
   created() {
@@ -29,15 +61,41 @@ export default {
   },
   methods: {
     fetch() {
+      const params = {
+        page: this.page,
+        name: this.search,
+      };
+
       let result = axios
-        .get("https://rickandmortyapi.com/api/character")
+        .get("https://rickandmortyapi.com/api/character/", { params })
         .then((res) => {
           this.characters = res.data.results;
+          console.log(res.data.info);
+          this.pages = res.data.info.pages;
           console.log(res.data);
         })
         .catch((err) => {
           console.log(err);
         });
+    },
+    ChangePage(page) {
+      this.page = page <= 0 || page > this.pages ? this.page : page;
+      this.fetch();
+    },
+    searchData() {
+      this.page = 1;
+      this.fetch();
+    },
+    showModal(id) {
+      this.fetchOne(id);
+    },
+    hideModal() {
+      this.$refs["my-modal"].hide();
+    },
+    async fetchOne(id) {
+      let result = await axios.get(`https://rickandmortyapi.com/api/character/${id}/`);
+      this.currentCharacter = result.data;
+      this.modal = true;
     },
   },
 };

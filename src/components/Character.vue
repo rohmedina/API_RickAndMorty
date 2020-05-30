@@ -1,17 +1,22 @@
 <template>
   <div class="column">
-    <div class="card">
-      <img v-bind:src="character.image" v-bind:alt="character.name" />
-      <div class="card-content">
-        <h3 class="title">{{ character.name }}</h3>
-        <button class="btn btn-success btn">Ver mas</button>
-      </div>
-    </div>
+    <b-card>
+      <b-card-img img-alt="Image" img-top v-bind:src="character.image" v-bind:alt="character.name"> </b-card-img>
+      <b-card-title>
+        {{ character.name }}
+      </b-card-title>
+      <b-button variant="success" @click="showMore(character.id)" v-b-modal.modal-sm>Ver mas</b-button>
+    </b-card>
   </div>
 </template>
 
 <script>
 export default {
   props: ["character"],
+  methods: {
+    showMore(id) {
+      this.$emit("showModal", id);
+    },
+  },
 };
 </script>
