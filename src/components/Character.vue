@@ -1,10 +1,11 @@
 <template>
-  <div>
-    <div>
+  <div class="column">
+    <div class="card">
       <img v-bind:src="character.image" v-bind:alt="character.name" />
-    </div>
-    <div>
-      <h3>{{ character.name }}</h3>
+      <div class="card-content">
+        <h3 class="title">{{ character.name }}</h3>
+        <button class="btn btn-success btn">Ver mas</button>
+      </div>
     </div>
   </div>
 </template>

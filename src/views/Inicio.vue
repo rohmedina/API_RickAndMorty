@@ -1,12 +1,12 @@
 <template>
   <div id="inicio">
-    <h1>R&M <span>Personajes</span></h1>
-
-    <div class="card" v-for="character in characters" v-bind:key="character.id">
-      <img v-bind:src="character.image" v-bind:alt="character.name" />
-      <div class="card-body">
-        <h2 class="card-title">{{ character.name }}</h2>
-      </div>
+    <div class="hero">
+      <h1>R&M <span>Personajes</span></h1>
+      <input type="text" name="" id="" />
+      <button class="btn btn-success btn" v-on:click="fetch">Consultar</button>
+    </div>
+    <div class="container">
+      <Character v-for="character of characters" v-bind:key="character.id" v-bind:character="character" />
     </div>
   </div>
 </template>
@@ -14,19 +14,31 @@
 <script>
 import axios from "axios";
 
+import Character from "@/components/Character.vue";
+
 export default {
   name: "inicio",
-  data() {
+  components: { Character },
+  data: function() {
     return {
       characters: [],
     };
   },
-  mounted() {
-    let vue = this;
-    axios.get("https://rickandmortyapi.com/api/character/").then(function(response) {
-      vue.characters = response.data.results;
-      console.log(vue.characters);
-    });
+  created() {
+    this.fetch();
+  },
+  methods: {
+    fetch() {
+      let result = axios
+        .get("https://rickandmortyapi.com/api/character")
+        .then((res) => {
+          this.characters = res.data.results;
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
   },
 };
 </script>
@@ -54,7 +66,6 @@ span {
   color: white;
 }
 img {
-  border-radius: 50%;
   width: 150px;
   padding: 1em;
 }
