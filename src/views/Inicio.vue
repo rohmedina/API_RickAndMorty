@@ -5,7 +5,7 @@
 
       <div>
         <b-input-group v-for="size in ['sm']" :key="size" :size="size" class="mb-3">
-          <b-form-input v-model="search" type="text" v-on:keyup.enter="searchData"></b-form-input>
+          <b-form-input v-model="search" class="md" type="text" v-on:keyup.enter="searchData"></b-form-input>
           <b-input-group-append>
             <b-button size="sm" text="Button" variant="success" v-on:click="searchData">Buscar</b-button>
           </b-input-group-append>
@@ -91,6 +91,7 @@ export default {
     searchData() {
       this.page = 1;
       this.fetch();
+      this.search = "";
     },
     showModal(id) {
       this.fetchOne(id);
@@ -118,10 +119,10 @@ h1,
 h2 {
   color: rgb(68, 168, 68);
 }
+h1 {
+  text-align: left;
+}
 span {
   color: white;
-}
-b-form-imput {
-  padding: 20px 40px;
 }
 </style>
